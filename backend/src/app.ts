@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { errors } from 'celebrate';
+import cors from 'cors';
 import productRouter from './routes/product';
 import orderRouter from './routes/order';
 import path from 'path';
@@ -15,6 +16,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 app.use(requestLogger);
 
 app.use('/product', productRouter);
