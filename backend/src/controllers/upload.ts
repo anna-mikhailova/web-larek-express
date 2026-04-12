@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import BadRequestError from '../errors/bad-request-error';
-
-const UPLOAD_PATH = process.env.UPLOAD_PATH || 'images';
+import { UPLOAD_PATH } from '../config';
 
 const uploadFile = (req: Request, res: Response, next: NextFunction) => {
   if (!req.file) {

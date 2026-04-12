@@ -3,8 +3,7 @@ import { Request } from 'express';
 import path from 'path';
 import crypto from 'crypto';
 import fs from 'fs';
-
-const UPLOAD_PATH_TEMP = process.env.UPLOAD_PATH_TEMP || 'temp';
+import { UPLOAD_PATH_TEMP } from '../config';
 const tempDir = path.join(__dirname, '../public', UPLOAD_PATH_TEMP);
 
 fs.mkdirSync(tempDir, { recursive: true });

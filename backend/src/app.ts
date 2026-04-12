@@ -1,9 +1,10 @@
-import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
+import { PORT, MONGODB_URI, ORIGIN_ALLOW } from './config';
 import { errors } from 'celebrate';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
 import productRouter from './routes/product';
 import orderRouter from './routes/order';
 import authRouter from './routes/auth';
@@ -14,20 +15,35 @@ import errorHandler from './middlewares/error-handler';
 import { requestLogger, errorLogger } from './middlewares/logger';
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/weblarek');
+mongoose.connect(MONGODB_URI);
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: process.env.ORIGIN_ALLOW,
+  origin: ORIGIN_ALLOW,
   credentials: true,
 }));
 app.use(cookieParser());
 app.use(requestLogger);
+app.use(limiter);
 
-app.use('/auth', authRouter);
+app.use('/auth', authLimiter, authRouter);
 app.use('/product', productRouter);
 app.use('/order', orderRouter);
 app.use('/upload', uploadRouter);
@@ -39,4 +55,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(3000, () => { console.log('listening on port 3000'); });
+app.listen(PORT, () => { console.log(`listening on port ${PORT}`); });

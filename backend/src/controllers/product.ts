@@ -6,9 +6,7 @@ import Product from '../models/product';
 import BadRequestError from '../errors/bad-request-error';
 import ConflictError from '../errors/conflict-error';
 import NotFoundError from '../errors/not-found-error';
-
-const UPLOAD_PATH = process.env.UPLOAD_PATH || 'images';
-const UPLOAD_PATH_TEMP = process.env.UPLOAD_PATH_TEMP || 'temp';
+import { UPLOAD_PATH, UPLOAD_PATH_TEMP } from '../config';
 
 const moveFromTemp = (fileName: string) => {
   const filename = path.basename(fileName);

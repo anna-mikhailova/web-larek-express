@@ -10,11 +10,17 @@ import BadRequestError from '../errors/bad-request-error';
 import ConflictError from '../errors/conflict-error';
 import NotFoundError from '../errors/not-found-error';
 import UnauthorizedError from '../errors/unauthorized-error';
+import {
+  AUTH_ACCESS_TOKEN_SECRET,
+  AUTH_REFRESH_TOKEN_SECRET,
+  AUTH_ACCESS_TOKEN_EXPIRY,
+  AUTH_REFRESH_TOKEN_EXPIRY,
+} from '../config';
 
-const ACCESS_SECRET = process.env.AUTH_ACCESS_TOKEN_SECRET || '';
-const REFRESH_SECRET = process.env.AUTH_REFRESH_TOKEN_SECRET || '';
-const ACCESS_EXPIRY = (process.env.AUTH_ACCESS_TOKEN_EXPIRY || '10m') as ms.StringValue;
-const REFRESH_EXPIRY = (process.env.AUTH_REFRESH_TOKEN_EXPIRY || '7d') as ms.StringValue;
+const ACCESS_SECRET = AUTH_ACCESS_TOKEN_SECRET;
+const REFRESH_SECRET = AUTH_REFRESH_TOKEN_SECRET;
+const ACCESS_EXPIRY = AUTH_ACCESS_TOKEN_EXPIRY as ms.StringValue;
+const REFRESH_EXPIRY = AUTH_REFRESH_TOKEN_EXPIRY as ms.StringValue;
 
 const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
